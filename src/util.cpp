@@ -290,7 +290,7 @@ fs::path GetDefaultDataDir()
 // Unix: ~/.pivx
 #ifdef WIN32
     // Windows
-    return GetSpecialFolderPath(CSIDL_APPDATA) / "PIVX";
+    return GetSpecialFolderPath(CSIDL_APPDATA) / "Pawcoin";
 #else
     fs::path pathRet;
     char* pszHome = getenv("HOME");
@@ -302,10 +302,10 @@ fs::path GetDefaultDataDir()
     // Mac
     pathRet /= "Library/Application Support";
     TryCreateDirectory(pathRet);
-    return pathRet / "PIVX";
+    return pathRet / "Pawcoin";
 #else
     // Unix
-    return pathRet / ".pivx";
+    return pathRet / ".pawcoin";
 #endif
 #endif
 }

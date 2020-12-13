@@ -1489,43 +1489,33 @@ int64_t GetBlockValue(int nHeight)
     const Consensus::Params& consensus = Params().GetConsensus();
     const bool isPoSActive = consensus.NetworkUpgradeActive(nHeight, Consensus::UPGRADE_POS);
     int64_t nSubsidy = 0;
-    if (nHeight == 0) {
-        nSubsidy = 60001 * COIN;
-    } else if (nHeight < 86400 && nHeight > 0) {
-        nSubsidy = 250 * COIN;
-    } else if (nHeight < (Params().NetworkID() == CBaseChainParams::TESTNET ? 145000 : 151200) && nHeight >= 86400) {
-        nSubsidy = 225 * COIN;
-    } else if (nHeight >= 151200 && !isPoSActive) {
-        nSubsidy = 45 * COIN;
-    } else if (isPoSActive && nHeight <= 302399) {
-        nSubsidy = 45 * COIN;
-    } else if (nHeight <= 345599 && nHeight >= 302400) {
-        nSubsidy = 40.5 * COIN;
-    } else if (nHeight <= 388799 && nHeight >= 345600) {
-        nSubsidy = 36 * COIN;
-    } else if (nHeight <= 431999 && nHeight >= 388800) {
-        nSubsidy = 31.5 * COIN;
-    } else if (nHeight <= 475199 && nHeight >= 432000) {
-        nSubsidy = 27 * COIN;
-    } else if (nHeight <= 518399 && nHeight >= 475200) {
-        nSubsidy = 22.5 * COIN;
-    } else if (nHeight <= 561599 && nHeight >= 518400) {
-        nSubsidy = 18 * COIN;
-    } else if (nHeight <= 604799 && nHeight >= 561600) {
-        nSubsidy = 13.5 * COIN;
-    } else if (nHeight <= 647999 && nHeight >= 604800) {
-        nSubsidy = 9 * COIN;
-    } else if (!consensus.NetworkUpgradeActive(nHeight, Consensus::UPGRADE_ZC_V2)) {
-        nSubsidy = 4.5 * COIN;
-    } else {
-        nSubsidy = 5 * COIN;
-    }
+     if (nHeight >=       1 && nHeight <=       1) {nSubsidy =     100000 * COIN;}
+    else if (nHeight >=       2 && nHeight <=     500) {nSubsidy =       1.00 * COIN;}
+    else if (nHeight >=     501 && nHeight <=   50000) {nSubsidy =       1.15 * COIN;}
+    else if (nHeight >=   50001 && nHeight <=  100000) {nSubsidy =       1.25 * COIN;}
+    else if (nHeight >=  100001 && nHeight <=  200000) {nSubsidy =       1.75 * COIN;}
+    else if (nHeight >=  200001 && nHeight <=  300000) {nSubsidy =       2.00 * COIN;}
+    else if (nHeight >=  300001 && nHeight <=  400000) {nSubsidy =       2.25 * COIN;}
+    else if (nHeight >=  400001 && nHeight <=  500000) {nSubsidy =       2.50 * COIN;}
+    else if (nHeight >=  500001 && nHeight <=  600000) {nSubsidy =       2.75 * COIN;}
+    else if (nHeight >=  600001 && nHeight <=  700000) {nSubsidy =       3.00 * COIN;}
+    else if (nHeight >=  700001 && nHeight <=  800000) {nSubsidy =       3.25 * COIN;}
+    else if (nHeight >=  800001 && nHeight <=  900000) {nSubsidy =       3.50 * COIN;}
+    else if (nHeight >=  900001 && nHeight <= 1000000) {nSubsidy =       3.75 * COIN;}
+    else if (nHeight >= 1000001 && nHeight <= 2500000) {nSubsidy =       4.00 * COIN;}
+    else if (nHeight >= 2500001 && nHeight <= 5000000) {nSubsidy =       4.25 * COIN;}
+    else if (nHeight >= 5000001 && nHeight <= 7500000) {nSubsidy =       4.50 * COIN;}
+    else if (nHeight >= 7500001 && nHeight <=10000000) {nSubsidy =       4.75 * COIN;}
+    else if (nHeight >=10000001 && nHeight <=50000000) {nSubsidy =       5.00 * COIN;}
+    else if (nHeight >=50000001 )                      {nSubsidy =       1.00 * COIN;}
     return nSubsidy;
 }
 
 int64_t GetMasternodePayment()
 {
-    return 3 * COIN;
+    const int nHeight = chainActive.Height();
+    if (nHeight > Params().GetConsensus().vUpgrades[Consensus::UPGRADE_V4_0].nActivationHeight)
+        return 0.75 * GetBlockValue(nHeight);
 }
 
 bool IsInitialBlockDownload()
@@ -3315,16 +3305,16 @@ bool CheckBlockHeader(const CBlockHeader& block, CValidationState& state, bool f
     if (fCheckPOW && !CheckProofOfWork(block.GetHash(), block.nBits))
         return state.DoS(50, false, REJECT_INVALID, "high-hash", false, "proof of work failed");
 
-    if (Params().IsRegTestNet()) return true;
+    //if (Params().IsRegTestNet()) return true;
 
     // Version 4 header must be used after consensus.ZC_TimeStart. And never before.
-    if (block.GetBlockTime() > Params().GetConsensus().ZC_TimeStart) {
-        if(block.nVersion < 4)
-            return state.DoS(50,false, REJECT_INVALID, "block-version", "must be above 4 after ZC_TimeStart");
-    } else {
-        if (block.nVersion >= 4)
-            return state.DoS(50,false, REJECT_INVALID, "block-version", "must be below 4 before ZC_TimeStart");
-    }
+    //if (block.GetBlockTime() > Params().GetConsensus().ZC_TimeStart) {
+    //    if(block.nVersion < 4)
+    //        return state.DoS(50,false, REJECT_INVALID, "block-version", "must be above 4 after ZC_TimeStart");
+    //} else {
+    //    if (block.nVersion >= 4)
+    //        return state.DoS(50,false, REJECT_INVALID, "block-version", "must be below 4 before ZC_TimeStart");
+    //}
 
     return true;
 }
