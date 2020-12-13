@@ -102,8 +102,9 @@ public:
         networkID = CBaseChainParams::MAIN;
         strNetworkID = "main";
 
-        genesis = CreateGenesisBlock(1586597615, 4777652, 0x1e0ffff0, 1, 250 * COIN);
+        genesis = CreateGenesisBlock(1586597615, 5045092, 0x1e0ffff0, 1, 0 * COIN);
         consensus.hashGenesisBlock = genesis.GetHash();
+        
         assert(consensus.hashGenesisBlock == uint256("0x00000753b038051aec9f568b5144cff38c271bac3df6b7cbe600f3449ae00a7f"));	
         assert(genesis.hashMerkleRoot == uint256("0x4db10272c7c4f1af29ce3e32b5674f813b77c583adeb90ced41d5fa7de531a30"));
 
@@ -121,7 +122,7 @@ public:
         consensus.nPoolMaxTransactions = 3;
         consensus.nProposalEstablishmentTime = 60 * 60 * 24;    // must be at least a day old to make it into a budget
         consensus.nStakeMinAge = 60 * 60;
-        consensus.nStakeMinDepth = 600;
+        consensus.nStakeMinDepth = 60;
         consensus.nTargetTimespan = 40 * 60;
         consensus.nTargetTimespanV2 = 30 * 60;
         consensus.nTargetSpacing = 1 * 60;
@@ -173,7 +174,7 @@ public:
         consensus.vUpgrades[Consensus::UPGRADE_ZC_PUBLIC].nActivationHeight     = 999999999;
         consensus.vUpgrades[Consensus::UPGRADE_V3_4].nActivationHeight          = 494000;
         consensus.vUpgrades[Consensus::UPGRADE_V4_0].nActivationHeight          = 494000; 
-  		consensus.vUpgrades[Consensus::UPGRADE_V5_DUMMY =
+  		consensus.vUpgrades[Consensus::UPGRADE_V5_DUMMY].nActivationHeight =    
                 Consensus::NetworkUpgrade::NO_ACTIVATION_HEIGHT;
 
         consensus.vUpgrades[Consensus::UPGRADE_ZC].hashActivationBlock =
